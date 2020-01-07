@@ -3,7 +3,6 @@
 
 typedef struct horse
 {
-    int HID;                //Horse ID
     char name[3];
     int posi;
     int posj;
