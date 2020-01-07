@@ -13,6 +13,7 @@ typedef struct Player
     char name[15];
     struct horse CJ[4];
     int HorseCnt;
+    int IsDone;
 };
 
 typedef struct Game
