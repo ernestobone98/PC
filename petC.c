@@ -77,7 +77,7 @@ void MoveHorse(int *line, int *col, int dice){
     }
     return;
   }
-  //octavo giro
+  //octavo y noveno giro
   if(*line >= 17 && *col == 17)
   {
     *line = *line + dice*2;
@@ -94,18 +94,7 @@ void MoveHorse(int *line, int *col, int dice){
     }
     return;
   }
-  if(dice < 4) return;
-  //noveno giro
-  if(*line == 29 && *col >= 13)
-  {
-    *col = *col - dice*2;
-    if(*col < 13)
-    {
-      *line = *line - abs(*col-13);
-      *col = 13;
-    }
-    return;
-  }
+
   //decimo giro
   if(*line >= 17 && *col == 13)
   {
@@ -324,9 +313,9 @@ void startGame(){
             MoveHorse(&tempi, &tempj, dicet);
             Players[turn].CJ[nch-1].posi = tempi;
             Players[turn].CJ[nch-1].posj = tempj;
-            printf("i: %d\nj: %d", Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj);
+            //printf("i: %d\nj: %d", Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj);
             //Players[turn].CJ[nch-1].name nombre del caballo
-            printTable(table, Players[turn].CJ[nch-1].ID, Players[turn].num, Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
+            printTable(table, Players[turn].CJ[nch-1].ID, Players[turn].num, Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj, oldi, oldj);
             printf("\nLe cheval %d s'est deplace %d case(s)\n", nch, dicet);
             break;
           }
@@ -359,13 +348,20 @@ void startGame(){
       //break;
     
     case 2:
-      printf("La partie est sauvegardée");
-      exit(0);
+      //struct Game *NewGame = (struct Game*) malloc(sizeof(struct Game));
+      //FILE *order;
+      // FILE *ply;
+      // ply = fopen("C:\\PeCh.txt","wb");
+      // fwrite(Players, sizeof(struct Player), nper, ply);
+      // fclose(ply);
+      
+      // printf("La partie est sauvegardée");
+      // exit(0);
     
     case 3:
       free(Players);
       free(Ordered);
-      printf("A bientot !");
+      printf("A BIENTOT !");
       exit(0);
     }
     turnCnt++;
