@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string.h>
 #include "petC.h"
+char colors[4][8] = { "\033[34m", "\033[91m", "\033[93m", "\033[32m" };
 
 int dice(){
   srand(time(NULL));
@@ -141,6 +142,7 @@ void startGame(){
   int DS; //Deplacer ou Sortir le cheval
   char horse = "H";
   char table[31][31];
+  
   setTable(table);
   printf("LES PETITS CHEVAUX\n Vous voulez jouer avec combiens personnes ?(2-4): ");
   scanf("%d", &nper);
@@ -222,6 +224,7 @@ void startGame(){
   {
     Players[i].HorseCnt = 0;
     Players[i].IsDone = 0;
+    Players[i].num = i;
   }
   int HorseCntP0 = 0, HorseCntP1 = 0, HorseCntP2 = 0, HorseCntP3 = 0;
   while (Players[0].IsDone != 3 || Players[1].IsDone != 3) //Voy a tener problemas
@@ -264,7 +267,7 @@ void startGame(){
           HorseCntP3++;
         }
         
-        printTable(table, Players[turn].CJ[Players[turn].HorseCnt].ID, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
+        printTable(table, Players[turn].CJ[Players[turn].HorseCnt].ID, Players[turn].num,Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
         printf("Cheval %d dehors !\n", Players[turn].HorseCnt+1);
         if (Players[turn].HorseCnt < 4) Players[turn].HorseCnt++;
         break;
@@ -298,7 +301,8 @@ void startGame(){
             Players[turn].CJ[HorseCntP3].posj = 13;
             HorseCntP3++;
           }
-          printTable(table, Players[turn].CJ[Players[turn].HorseCnt].ID, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
+          printTable(table, Players[turn].CJ[Players[turn].HorseCnt].ID, Players[turn].num,Players[turn].CJ[Players[turn].HorseCnt].posi, 
+            Players[turn].CJ[Players[turn].HorseCnt].posj, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
           printf("Cheval %d dehors !\n", Players[turn].HorseCnt+1);
           printf("\n");
           if (Players[turn].HorseCnt < 4) Players[turn].HorseCnt++;
@@ -322,7 +326,7 @@ void startGame(){
             Players[turn].CJ[nch-1].posj = tempj;
             printf("i: %d\nj: %d", Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj);
             //Players[turn].CJ[nch-1].name nombre del caballo
-            printTable(table, Players[turn].CJ[nch-1].ID, Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
+            printTable(table, Players[turn].CJ[nch-1].ID, Players[turn].num, Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
             printf("\nLe cheval %d s'est deplace %d case(s)\n", nch, dicet);
             break;
           }
@@ -347,7 +351,7 @@ void startGame(){
         Players[turn].CJ[nch-1].posj = tempj;
         printf("i: %d\nj: %d", Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj);
         //Players[turn].CJ[nch-1].name
-        printTable(table, Players[turn].CJ[nch-1].ID, tempi, tempj, oldi, oldj);
+        printTable(table, Players[turn].CJ[nch-1].ID, Players[turn].num, tempi, tempj, oldi, oldj);
         printf("\nLe cheval %d s'est deplace %d case(s)\n", nch, dicet);
         break;
       }
@@ -356,7 +360,7 @@ void startGame(){
     
     case 2:
       printf("La partie est sauvegardée");
-      break;
+      exit(0);
     
     case 3:
       free(Players);
@@ -418,13 +422,15 @@ void setTable(char table[31][31]){
   
 }
 
-void printTable(char table[31][31], int horse, int posi, int posj, int oldi, int oldj){
+void printTable(char table[31][31], int horse, int pn, int posi, int posj, int oldi, int oldj){
   
+  //char colors[4][8] = { "\033[34m", "\033[91m", "\033[93m", "\033[32m" };
+  //table[posi][posj] = colors[pn]+horse+'\033[0m';
   table[posi][posj] = horse+'0';
   if(posi != oldi || posj != oldj) table[oldi][oldj] = 43;
   for(int i=0; i<31; i++){
     for(int j=0; j<31; j++){
-      printf("%c ", table[i][j]);
+      printf("%c ",table[i][j]);
     }
   printf("\n");
   }

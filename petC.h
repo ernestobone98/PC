@@ -10,6 +10,7 @@ typedef struct horse
 
 typedef struct Player
 {
+    int num;
     char name[15];
     struct horse CJ[4];
     int HorseCnt;
