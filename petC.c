@@ -356,7 +356,7 @@ void startGame(){
       // fclose(ply);
       
       // printf("La partie est sauvegardée");
-      // exit(0);
+       exit(0);
     
     case 3:
       free(Players);
@@ -428,12 +428,11 @@ void printTable(char table[31][31], int horse, int pn, int posi, int posj, int o
     for(int j=0; j<31; j++){
       printf("%c ",table[i][j]);
     }
-  printf("\n");
+    printf("\n");
   }
 }
 
 int main(){
   startGame();
-  //setTable();
   return 0;
 }
