@@ -128,7 +128,7 @@ void MoveHorse(int *line, int *col, int dice){
 void startGame(){
 
   int nper, action, dicet, nch, posi, posj;
-  int DS; //Deplacer ou Sortir le cheval
+  int DS, ateH=0, pID; //Deplacer ou Sortir le cheval
   char horse = "H";
   char table[31][31];
   
@@ -259,6 +259,24 @@ void startGame(){
         printTable(table, Players[turn].CJ[Players[turn].HorseCnt].ID, Players[turn].num,Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
         printf("Cheval %d dehors !\n", Players[turn].HorseCnt+1);
         if (Players[turn].HorseCnt < 4) Players[turn].HorseCnt++;
+
+        for (int i = 0; i < nper; i++)
+        {
+          for (int j = 0; j < 4; j++)
+          {
+            if (Players[turn].CJ[Players[turn].HorseCnt].posi == Players[i].CJ[j].posi && Players[turn].CJ[Players[turn].HorseCnt].posj == 
+              Players[i].CJ[j].posj && Players[turn].CJ[Players[turn].HorseCnt].ID != Players[i].CJ[j].ID)
+            {
+              Players[i].CJ[j].posi = NULL;
+              Players[i].CJ[j].posj = NULL;
+              ateH = Players[i].CJ[j].ID;
+              pID = Players[i].num;
+              printf("Cheval %d du joueur %d elimine", Players[i].CJ[j].ID, Players[i].num+1);
+            }
+            
+          }
+          
+        }
         break;
       }
       
@@ -293,15 +311,39 @@ void startGame(){
           printTable(table, Players[turn].CJ[Players[turn].HorseCnt].ID, Players[turn].num,Players[turn].CJ[Players[turn].HorseCnt].posi, 
             Players[turn].CJ[Players[turn].HorseCnt].posj, Players[turn].CJ[Players[turn].HorseCnt].posi, Players[turn].CJ[Players[turn].HorseCnt].posj);
           printf("Cheval %d dehors !\n", Players[turn].HorseCnt+1);
-          printf("\n");
           if (Players[turn].HorseCnt < 4) Players[turn].HorseCnt++;
+
+          for (int i = 0; i < nper; i++)
+          {
+            for (int j = 0; j < 4; j++)
+            {
+              if (Players[turn].CJ[Players[turn].HorseCnt].posi == Players[i].CJ[j].posi && Players[turn].CJ[Players[turn].HorseCnt].posj == 
+                Players[i].CJ[j].posj && Players[turn].CJ[Players[turn].HorseCnt].ID != Players[i].CJ[j].ID)
+              {
+                Players[i].CJ[j].posi = NULL;
+                Players[i].CJ[j].posj = NULL;
+                ateH = Players[i].CJ[j].ID;
+                pID = Players[i].num;
+                printf("Cheval %d du joueur %d elimine", Players[i].CJ[j].ID, Players[i].num+1);
+              } 
+            }
+          }
+          printf("\n");
           
         break;
           
           case 2:
-            printf("Vous avez eu %d\n Vous voulez deplacer quel cheval ? (1-%d):\n", dicet, Players[turn].HorseCnt);
-            scanf("%d", &nch);
-            while (nch < 1 || nch > Players[turn].HorseCnt){
+            if(ateH != 0 && pID == turn){
+              printf("Vous avez eu %d\n Vous voulez deplacer quel cheval ? (1-%d except %d):\n", dicet, Players[turn].HorseCnt, ateH);
+              scanf("%d", &nch);
+            }
+            else
+            {
+              printf("Vous avez eu %d\n Vous voulez deplacer quel cheval ? (1-%d):\n", dicet, Players[turn].HorseCnt, ateH);
+              scanf("%d", &nch);
+            }
+            
+            while ((nch < 1 || nch > Players[turn].HorseCnt) && nch != ateH){
               printf("\nS'il vous plait sasir un numero valable: ");
               scanf("%d", &nch);
             }
@@ -317,6 +359,23 @@ void startGame(){
             //Players[turn].CJ[nch-1].name nombre del caballo
             printTable(table, Players[turn].CJ[nch-1].ID, Players[turn].num, Players[turn].CJ[nch-1].posi, Players[turn].CJ[nch-1].posj, oldi, oldj);
             printf("\nLe cheval %d s'est deplace %d case(s)\n", nch, dicet);
+            for (int i = 0; i < nper; i++)
+            {
+              for (int j = 0; j < 4; j++)
+              {
+                if (Players[turn].CJ[nch-1].posi == Players[i].CJ[j].posi && Players[turn].CJ[nch-1].posj == 
+                  Players[i].CJ[j].posj && Players[turn].CJ[nch-1].ID != Players[i].CJ[j].ID)
+                {
+                  Players[i].CJ[j].posi = NULL;
+                  Players[i].CJ[j].posj = NULL;
+                  ateH = Players[i].CJ[j].ID;
+                  pID = Players[i].num;
+                  printf("Cheval %d du joueur %d elimine", Players[i].CJ[j].ID, Players[i].num+1);
+                }
+                
+              }
+              
+            }
             break;
           }
           break;
@@ -324,9 +383,16 @@ void startGame(){
 
       if(dicet != 6 && Players[turn].HorseCnt > 0 && Players[turn].HorseCnt <= 4)
       {
-        printf("\nVous avez eu %d\nVous voulez deplacer quel cheval ? (1-%d):\n", dicet, Players[turn].HorseCnt);
-        scanf("%d", &nch);
-        while (nch < 1 || nch > Players[turn].HorseCnt){
+        if(ateH != 0 && pID == turn){
+          printf("Vous avez eu %d\n Vous voulez deplacer quel cheval ? (1-%d except %d):\n", dicet, Players[turn].HorseCnt, ateH);
+          scanf("%d", &nch);
+        }
+        else
+        {
+          printf("Vous avez eu %d\n Vous voulez deplacer quel cheval ? (1-%d):\n", dicet, Players[turn].HorseCnt, ateH);
+          scanf("%d", &nch);
+        }
+        while ((nch < 1 || nch > Players[turn].HorseCnt) && nch != ateH){
           printf("\nS'il vous plait sasir un numero valable: ");
           scanf("%d", &nch);
         }
@@ -342,6 +408,23 @@ void startGame(){
         //Players[turn].CJ[nch-1].name
         printTable(table, Players[turn].CJ[nch-1].ID, Players[turn].num, tempi, tempj, oldi, oldj);
         printf("\nLe cheval %d s'est deplace %d case(s)\n", nch, dicet);
+        for (int i = 0; i < nper; i++)
+        {
+          for (int j = 0; j < 4; j++)
+          {
+            if (Players[turn].CJ[nch-1].posi == Players[i].CJ[j].posi && Players[turn].CJ[nch-1].posj == 
+              Players[i].CJ[j].posj && Players[turn].CJ[nch-1].ID != Players[i].CJ[j].ID)
+            {
+              Players[i].CJ[j].posi = NULL;
+              Players[i].CJ[j].posj = NULL;
+              ateH = Players[i].CJ[j].ID;
+              pID = Players[i].num;
+              printf("Cheval %d du joueur %d elimine", Players[i].CJ[j].ID, Players[i].num+1);
+            }
+            
+          }
+          
+        }
         break;
       }
         
@@ -420,13 +503,29 @@ void setTable(char table[31][31]){
 
 void printTable(char table[31][31], int horse, int pn, int posi, int posj, int oldi, int oldj){
   
-  //char colors[4][8] = { "\033[34m", "\033[91m", "\033[93m", "\033[32m" };
-  //table[posi][posj] = colors[pn]+horse+'\033[0m';
+  char colors[4][8] = { "\033[34m", "\033[91m", "\033[93m", "\033[32m" };
+  
   table[posi][posj] = horse+'0';
+  // table[posi][posj] = horse + 1000 + ( 100 * ( pn + 1 ));
   if(posi != oldi || posj != oldj) table[oldi][oldj] = 43;
   for(int i=0; i<31; i++){
     for(int j=0; j<31; j++){
-      printf("%c ",table[i][j]);
+      // if(table[i][j] > 1000){
+        // if(table[i][j] > 1400){
+        //   printf("%d", table[i][j]);
+        // }else if(table[i][j] > 1300){
+        //   printf("%d", table[i][j]);
+        // }else if(table[i][j] > 1200){
+        //   printf("%d", table[i][j]);
+        // }else if(table[i][j] > 1100){
+        //   printf("%d", table[i][j]);
+        // }
+
+      // }else{
+        printf("%c ", table[i][j]);
+      // }
+      // printf("%s", horse+'0');
+      // if(table[i][j] == '#') printf("%s%s\033[0m ", colors[pn], horse+'0');
     }
     printf("\n");
   }
